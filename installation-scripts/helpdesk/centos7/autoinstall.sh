@@ -61,7 +61,7 @@ EOF
 
 #Install php and httpd services
 yum -y install yum-utils
-yum-config-manager --enable remi-php73
+yum-config-manager --enable remi-php71
 yum install -y git curl openssl httpd
 yum -y install MariaDB-server MariaDB-client
 yum -y install php php-cli php-common php-fpm php-gd php-mbstring php-pecl-mcrypt php-mysqlnd php-odbc php-pdo php-xml  php-opcache php-imap php-bcmath php-ldap php-pecl-zip php-soap
@@ -127,6 +127,15 @@ read db_pass
 
 
 mysql -u root -p -e "CREATE DATABASE ${db_name};GRANT ALL PRIVILEGES ON ${db_name}.* TO '${db_user}'@'localhost' IDENTIFIED BY '${db_pass}';FLUSH PRIVILEGES;"
+
+echo "TIMESYNC SQL QUERIES FIRING -> -> -> -> -> ->"
+sleep 5
+mysql -u root -e "FLUSH PRIVILEGES;CREATE USER 'helpdeskuser'@'localhost' IDENTIFIED BY 'helpdesk';CREATE DATABASE helpdesk;GRANT ALL PRIVILEGES ON helpdesk.* TO 'helpdeskuser'@'localhost';"
+
+#FLUSH PRIVILEGES;
+#CREATE USER 'helpdeskuser'@'localhost' IDENTIFIED BY 'helpdesk';
+#CREATE DATABASE helpdesk;
+#GRANT ALL PRIVILEGES ON helpdesk.* TO 'helpdeskuser'@'localhost';
 
 #Change Execution Time
 sed -i "s/max_execution_time = .*/max_execution_time = 120/" /etc/php.ini
